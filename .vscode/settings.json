@@ -1,5 +1,5 @@
 {
   "java.project.referencedLibraries": [
-    "hello/lib/algs4.jar"
+    "lib/algs4.jar"
   ]
 }
