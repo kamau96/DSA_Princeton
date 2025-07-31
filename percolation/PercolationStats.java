@@ -4,9 +4,12 @@ import edu.princeton.cs.algs4.StdStats;
 import edu.princeton.cs.algs4.StdOut;
 
 public class PercolationStats {
+
     private double[] thresholds;
+    private double confidence95 = 1.96; // 95% confidence level
+
     // perform independent trials on an n-by-n grid
-    public PercolationStats(int n, int trials){
+    public PercolationStats(int n, int trials) {
         if (n <= 0 || trials <= 0) {
             throw new IllegalArgumentException("Grid size and number of trials must be greater than 0");
         }
@@ -17,38 +20,38 @@ public class PercolationStats {
             while (!perc.percolates()) {
                 int row = StdRandom.uniformInt(n);
                 int col = StdRandom.uniformInt(n);
-                perc.open(row, col);
+                perc.open(row + 1, col + 1); // Convert to 1-based indexing
             }
             thresholds[t] = (double) perc.numberOfOpenSites() / (n * n);
         }
     }
 
     // sample mean of percolation threshold
-    public double mean(){
+    public double mean() {
         return StdStats.mean(thresholds);
     }
 
     // sample standard deviation of percolation threshold
-    public double stddev(){
+    public double stddev() {
         return StdStats.stddev(thresholds);
     }
 
     // low endpoint of 95% confidence interval
-    public double confidenceLo(){
+    public double confidenceLo() {
         double mean = mean();
         double stddev = stddev();
-        return mean - (1.96 * stddev / Math.sqrt(thresholds.length));
+        return mean - (confidence95 * stddev / Math.sqrt(thresholds.length));
     }
 
     // high endpoint of 95% confidence interval
-    public double confidenceHi(){
+    public double confidenceHi() {
         double mean = mean();
         double stddev = stddev();
-        return mean + (1.96 * stddev / Math.sqrt(thresholds.length));
+        return mean + (confidence95 * stddev / Math.sqrt(thresholds.length));
     }
 
    // test client (see below)
-   public static void main(String[] args){
+   public static void main(String[] args) {
         if (args.length < 2) {
             throw new IllegalArgumentException("Please provide grid size and number of trials as arguments");
         }
