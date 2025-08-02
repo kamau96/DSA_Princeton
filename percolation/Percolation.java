@@ -6,6 +6,8 @@ public class Percolation {
     private boolean[][] grid;
     private int openSitesCount;
     private WeightedQuickUnionUF uf;
+    private int virtualTop; // Virtual top site for union-find
+    private int virtualBottom; // Virtual bottom site for union-find
 
     // creates n-by-n grid, with all sites initially blocked
     public Percolation(int n) {
@@ -15,6 +17,8 @@ public class Percolation {
         grid = new boolean[n][n];
         openSitesCount = 0;
         uf = new WeightedQuickUnionUF(n * n); 
+        virtualTop = n*n-1; // Virtual top site index
+        virtualBottom = n*n-2; // Virtual bottom site index
 
     }
     private boolean helper(int row, int col) {
@@ -37,6 +41,14 @@ public class Percolation {
             int index = row * grid.length + col;
 
             // Connect to adjacent open sites
+            // Connect to virtual top site
+            if (row == 0) {
+                uf.union(index, virtualTop); 
+            }
+            // Connect to virtual bottom site
+            if (row == grid.length - 1) {   
+                uf.union(index, virtualBottom);
+            }
             // Up
             if (row > 0 && isOpen(row, col + 1)) {
                 uf.union(index, (row - 1) * grid.length + col);
@@ -76,11 +88,7 @@ public class Percolation {
         int index = row * grid.length + col;
         // Check if the site is open and connected to the top row
         if (isOpen(row + 1, col + 1)) {
-            for (int i = 0; i < grid.length; i++) {
-                if (isOpen(1, i+1) && (uf.find(index) == uf.find(i))) {
-                    return true;
-                }
-            }
+            return uf.find(index) == uf.find(virtualTop);
         }
         return false;
     }
@@ -93,12 +101,7 @@ public class Percolation {
     // does the system percolate?
     public boolean percolates() {
         // Check if any site in the bottom row is connected to the top row
-        for (int i = 0; i < grid.length; i++) {
-            if (isOpen(grid.length, i + 1) && isFull(grid.length, i + 1)) {
-                return true;
-            }
-        }
-        return false;
+        return uf.find(virtualTop) == uf.find(virtualBottom);
     }
 
     // test client (optional)
