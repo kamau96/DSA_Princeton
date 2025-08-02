@@ -16,9 +16,11 @@ public class Percolation {
         }
         grid = new boolean[n][n];
         openSitesCount = 0;
-        uf = new WeightedQuickUnionUF(n * n); 
-        virtualTop = n*n-1; // Virtual top site index
-        virtualBottom = n*n-2; // Virtual bottom site index
+        uf = new WeightedQuickUnionUF(n * n + 2); 
+        // Virtual top site index
+        virtualTop = n * n; 
+        // Virtual bottom site index
+        virtualBottom = n * n + 1; 
 
     }
     private boolean helper(int row, int col) {
