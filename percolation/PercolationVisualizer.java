@@ -15,7 +15,6 @@
  *  with with site (1, 1) in the upper left-hand corner.
  *
  ******************************************************************************/
-package percolation;
 import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.StdDraw;
 
