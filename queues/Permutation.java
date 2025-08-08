@@ -7,12 +7,13 @@ public class Permutation {
 
     while (!StdIn.isEmpty()) {
       String s = StdIn.readString();
-      rq.enqueue(s);
       if (k == 0) {
         rq.dequeue();
-      } else {
+      } 
+      else {
         k--;
       }
+      rq.enqueue(s);
     }
 
     for (String s : rq) {
